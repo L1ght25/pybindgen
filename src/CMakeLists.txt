@@ -18,10 +18,11 @@ add_executable(main)
 
 target_sources(main PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/generator.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/util.cpp
 )
 
-# llvm_map_components_to_libnames(llvm_libs Core Support IRReader)
-# target_link_libraries(main ${llvm_libs})
+add_dependencies(main main_lib)
 
 target_link_libraries(main
     PRIVATE
@@ -33,4 +34,10 @@ target_link_libraries(main
     clangToolingCore
     )
 
-# target_compile_options(main PRIVATE "-fno-rtti")
+add_custom_command(TARGET main POST_BUILD
+    COMMAND cp
+            $<TARGET_FILE:main_lib>
+            ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND echo \"$<TARGET_FILE:main_lib>\" > ${CMAKE_CURRENT_BINARY_DIR}/lib_file
+    COMMENT "Copying library to build directory"
+)

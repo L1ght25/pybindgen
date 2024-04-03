@@ -1,5 +1,6 @@
 #pragma once
 
+#include "util.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
 #include <memory>
@@ -12,9 +13,9 @@ using namespace clang;
 
 class IGenerator {
 public:
-    IGenerator(const std::string& outputPath, const std::string& moduleName)
+    IGenerator(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager)
     {
-        OnStart(outputPath, moduleName);
+        OnStart(outputPath, moduleName, headerManager);
     }
 
     virtual void FoundRecord(const CXXRecordDecl* record) = 0;
@@ -29,14 +30,19 @@ public:
     }
 
 private:
-    void OnStart(const std::string& outputPath, const std::string& moduleName);
+    void OnStart(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager);
     void OnEnd();
 
 protected:
-    std::unordered_map<std::string, std::string> classes_;
+    struct TClassCtx {
+        std::string generated_code;
+        bool has_ctor{false};
+    };
+
+    std::unordered_map<std::string, TClassCtx> classes_;
     std::vector<std::string> functions_;
     std::ofstream outputFile_;
 };
 
 
-std::unique_ptr<IGenerator> CreateDefaultGenerator(const std::string& outputPath, const std::string& moduleName);
+std::unique_ptr<IGenerator> CreateDefaultGenerator(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager);

@@ -1,18 +1,24 @@
 #include "generator.h"
+#include "util.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
 
 #include <format>
+#include <iostream>
 #include <memory>
 #include <numeric>
 #include <string>
 #include <string_view>
 
 
-void IGenerator::OnStart(const std::string& outputPath, const std::string& moduleName) {
+void IGenerator::OnStart(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager) {
     outputFile_.open(outputPath, std::ios::out | std::ios::app);
 
-    outputFile_ << "#include <pybind11/pybind11.h>\n\n\n";
+    outputFile_ << "#include <pybind11/pybind11.h>\n\n";
+
+    outputFile_ << headerManager.GetIncludes() << "\n\n";
+
+    outputFile_ << "namespace py = pybind11;\n\n";
 
     outputFile_ << std::format(
         "PYBIND11_MODULE({}, m) ",
@@ -21,8 +27,11 @@ void IGenerator::OnStart(const std::string& outputPath, const std::string& modul
 }
 
 void IGenerator::OnEnd() {
-    for (auto&& [_, decl] : classes_) {
-        outputFile_ << std::move(decl) << ";";
+    for (auto& [_, decl] : classes_) {
+        if (!decl.has_ctor) {
+            decl.generated_code += "\n\t\t.def(py::init<>())";
+        }
+        outputFile_ << decl.generated_code << ";";
     }
 
     outputFile_ << std::endl;
@@ -39,19 +48,21 @@ void IGenerator::OnEnd() {
 class TDefaultGenerator : public IGenerator {
 public:
 
-    TDefaultGenerator(const std::string outputPath, const std::string& moduleName)
-    : IGenerator(outputPath, moduleName)
+    TDefaultGenerator(const std::string outputPath, const std::string& moduleName, const HeaderManager& headerManager)
+    : IGenerator(outputPath, moduleName, headerManager)
     {}
 
     void FoundRecord(const CXXRecordDecl* record) override {
         auto recordName = record->getDeclName().getAsString();
-        classes_[recordName] += std::format(
+        classes_[recordName].generated_code += std::format(
             "\n\tpy::class_<{}>(m, \"{}\")", recordName, recordName
         );
     }
 
     void FoundConstructor(const CXXConstructorDecl* ctor) override {
-        auto& classDecl = classes_[ctor->getParent()->getDeclName().getAsString()];
+        auto& classCtx = classes_[ctor->getParent()->getDeclName().getAsString()];
+        classCtx.has_ctor = true;
+        auto& classDecl = classCtx.generated_code;
 
         classDecl += "\n\t\t.def(py::init<";
 
@@ -67,7 +78,7 @@ public:
 
     void FoundField(const FieldDecl* field) override {
         auto recordName = field->getParent()->getDeclName().getAsString();
-        auto& classDecl = classes_[recordName];
+        auto& classDecl = classes_[recordName].generated_code;
 
         classDecl += std::format(
             "\n\t\t.def_readwrite(\"{}\", &{}::{})",
@@ -79,7 +90,7 @@ public:
 
     void FoundMethod(const CXXMethodDecl* method) override {
         auto recordName = method->getParent()->getDeclName().getAsString();
-        auto& classDecl = classes_[recordName];
+        auto& classDecl = classes_[recordName].generated_code;
 
         classDecl += std::format(
             "\n\t\t.def(\"{}\", &{}::{})",
@@ -99,6 +110,6 @@ public:
     }
 };
 
-std::unique_ptr<IGenerator> CreateDefaultGenerator(const std::string& outputPath, const std::string& moduleName) {
-    return std::make_unique<TDefaultGenerator>(outputPath, moduleName);
+std::unique_ptr<IGenerator> CreateDefaultGenerator(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager) {
+    return std::make_unique<TDefaultGenerator>(outputPath, moduleName, headerManager);
 }
