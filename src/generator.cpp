@@ -11,43 +11,24 @@
 #include <string_view>
 
 
-void IGenerator::OnStart(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager) {
-    outputFile_.open(outputPath, std::ios::out | std::ios::trunc);
-
-    outputFile_ << "#include <pybind11/pybind11.h>\n\n";
-
-    outputFile_ << headerManager.GetIncludes() << "\n\n";
-
-    outputFile_ << "namespace py = pybind11;\n\n";
-
-    outputFile_ << std::format(
-        "PYBIND11_MODULE({}, m) ",
-        moduleName
-    ) << "{\n";
-}
-
-void IGenerator::OnEnd() {
-    for (auto& [_, decl] : classes_) {
-        outputFile_ << decl << ";";
-    }
-
-    outputFile_ << std::endl;
-
-    for (auto&& decl : functions_) {
-        outputFile_ << std::move(decl) << ";";
-    }
-
-    outputFile_ << "\n}\n";
-
-    outputFile_.close();
-}
-
 class TDefaultGenerator : public IGenerator {
 public:
 
     TDefaultGenerator(const std::string outputPath, const std::string& moduleName, const HeaderManager& headerManager)
     : IGenerator(outputPath, moduleName, headerManager)
-    {}
+    {
+        outputFile_.open(outputPath, std::ios::out | std::ios::trunc);
+
+        outputFile_ << "#include <pybind11/pybind11.h>\n\n";
+        outputFile_ << headerManager.GetIncludes() << "\n\n";
+
+        outputFile_ << "namespace py = pybind11;\n\n";
+
+        outputFile_ << std::format(
+            "PYBIND11_MODULE({}, m) ",
+            moduleName
+        ) << "{\n";
+    }
 
     void FoundRecord(const CXXRecordDecl* record) override {
         auto recordName = record->getDeclName().getAsString();
@@ -106,6 +87,20 @@ public:
             function->getNameAsString()
         );
         functions_.emplace_back(std::move(functionDecl));
+    }
+
+    ~TDefaultGenerator() override {
+        for (auto& [_, decl] : classes_) {
+            outputFile_ << decl << ";";
+        }
+        outputFile_ << std::endl;
+
+        for (auto&& decl : functions_) {
+            outputFile_ << std::move(decl) << ";";
+        }
+        outputFile_ << "\n}\n";
+
+        outputFile_.close();
     }
 };
 

@@ -5,6 +5,7 @@
 
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include "clang/AST/DeclCXX.h"
+#include <clang/Tooling/Tooling.h>
 
 #include <string>
 #include <unordered_set>
@@ -31,8 +32,18 @@ private:
     }
 
     bool AlreadyHandled(const Decl* decl);
+    bool IsExternMatch(const Decl* decl);  // check if match is not in requested headers
 
 private:
     std::unordered_set<const Decl*> matches_;
     std::unique_ptr<IGenerator> generator_;
 };
+
+struct TGenContext {
+    const tooling::CompilationDatabase& compilations;
+    const std::vector<std::string> & sourceDirs;
+    const std::string& generatedFilePath;
+    const std::string& moduleName;
+};
+
+void RunGen(TGenContext ctx);

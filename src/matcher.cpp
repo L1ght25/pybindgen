@@ -2,13 +2,19 @@
 
 #include "clang/AST/NestedNameSpecifier.h"
 
+using namespace clang;
+using namespace clang::ast_matchers;
+using namespace clang::tooling;
+
 
 ClassFinder::ClassFinder(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager)
 : generator_(CreateDefaultGenerator(outputPath, moduleName, headerManager))
 {}
 
 void ClassFinder::run(const MatchFinder::MatchResult& result) {
-    if (AlreadyHandled(result.Nodes.getNodeAs<Decl>("id"))) {
+    if (const clang::Decl* decl = result.Nodes.getNodeAs<Decl>("id");
+        AlreadyHandled(decl) || IsExternMatch(decl)
+    ) {
         return;
     }
 
@@ -54,4 +60,27 @@ bool ClassFinder::AlreadyHandled(const Decl* decl) {
         }
     matches_.insert(decl);
     return false;
+}
+
+bool ClassFinder::IsExternMatch(const Decl* decl) {
+    return !decl->getASTContext().getSourceManager().isWrittenInMainFile(decl->getLocation());
+}
+
+
+void RunGen(TGenContext ctx) {
+    HeaderManager manager(ctx.sourceDirs);
+    manager.PrintHeaders();
+
+    ClassFinder classFinder(ctx.generatedFilePath, ctx.moduleName, manager);
+    MatchFinder finder;
+
+    DeclarationMatcher classMatcher = cxxRecordDecl(decl().bind("id"));
+    DeclarationMatcher funcMatcher = functionDecl(decl().bind("id"));
+
+    finder.addMatcher(classMatcher, &classFinder);
+    finder.addMatcher(funcMatcher, &classFinder);
+
+    ClangTool tool(ctx.compilations, manager.GetHeaders());
+
+    tool.run(newFrontendActionFactory(&finder).get());
 }

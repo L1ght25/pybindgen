@@ -27,7 +27,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/generator.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/util.cpp
 )
 
-add_dependencies(main main_lib)
+add_dependencies(main ${LIBNAME})
 
 target_link_libraries(main
     PRIVATE
