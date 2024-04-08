@@ -12,7 +12,7 @@
 
 
 void IGenerator::OnStart(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager) {
-    outputFile_.open(outputPath, std::ios::out | std::ios::app);
+    outputFile_.open(outputPath, std::ios::out | std::ios::trunc);
 
     outputFile_ << "#include <pybind11/pybind11.h>\n\n";
 
