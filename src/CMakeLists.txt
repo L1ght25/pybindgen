@@ -37,7 +37,7 @@ target_link_libraries(main
 
 add_custom_command(TARGET main POST_BUILD
   COMMAND echo "Include directories: $<JOIN:$<TARGET_PROPERTY:${LIBNAME},INTERFACE_INCLUDE_DIRECTORIES>, >"
-  COMMAND $<TARGET_FILE:main> --python-lib-name=${LIBNAME} --generated-file-path=${CMAKE_CURRENT_BINARY_DIR}/generated.cpp -p ${CMAKE_BINARY_DIR} "$<JOIN:$<TARGET_PROPERTY:${LIBNAME},INTERFACE_INCLUDE_DIRECTORIES>,;>"
+  COMMAND $<TARGET_FILE:main> --python-lib-name=py_${LIBNAME} --generated-file-path=${CMAKE_CURRENT_BINARY_DIR}/generated.cpp -p ${CMAKE_BINARY_DIR} "$<JOIN:$<TARGET_PROPERTY:${LIBNAME},INTERFACE_INCLUDE_DIRECTORIES>,;>"
   COMMAND_EXPAND_LISTS
   VERBATIM
   COMMENT "Generating file..."
