@@ -23,26 +23,18 @@ int main(int argc, const char **argv) {
     auto op = CommonOptionsParser::create(argc, argv, Opts);
     HeaderManager manager(op->getSourcePathList());
 
+    for (const auto& str : manager.GetHeaders()) {
+        std::cout << "found header: " << str << std::endl;
+    }
+
     ClassFinder classFinder(GeneratedFilePath.getValue(), PythonLibName.getValue(), manager);
     MatchFinder finder;
 
     DeclarationMatcher classMatcher = cxxRecordDecl(decl().bind("id"));
-    DeclarationMatcher accessMatcher = accessSpecDecl(decl().bind("id"));
-    DeclarationMatcher ctorMatcher = cxxConstructorDecl(decl().bind("id"));
-    DeclarationMatcher methodMatcher = cxxMethodDecl(decl().bind("id"));
-    DeclarationMatcher fieldMatcher = fieldDecl(decl().bind("id"));
     DeclarationMatcher funcMatcher = functionDecl(decl().bind("id"));
 
     finder.addMatcher(classMatcher, &classFinder);
-    finder.addMatcher(accessMatcher, &classFinder);
-    finder.addMatcher(ctorMatcher, &classFinder);
-    finder.addMatcher(methodMatcher, &classFinder);
-    finder.addMatcher(fieldMatcher, &classFinder);
     finder.addMatcher(funcMatcher, &classFinder);
-
-    for (const auto& str : manager.GetHeaders()) {
-        std::cout << "SOURCE: " << str << std::endl;
-    }
 
     ClangTool tool(op->getCompilations(), manager.GetHeaders());
 

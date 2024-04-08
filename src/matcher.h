@@ -35,5 +35,4 @@ private:
 private:
     std::unordered_set<const Decl*> matches_;
     std::unique_ptr<IGenerator> generator_;
-    bool is_public{false};
 };

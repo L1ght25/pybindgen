@@ -23,5 +23,4 @@ private:
     std::string includes_;
 };
 
-
 std::tuple<std::string, std::string, std::string, std::vector<std::string>> ParseArguments(int argc, const char** argv);

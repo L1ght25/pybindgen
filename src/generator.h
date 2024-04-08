@@ -19,7 +19,10 @@ public:
     }
 
     virtual void FoundRecord(const CXXRecordDecl* record) = 0;
+
     virtual void FoundConstructor(const CXXConstructorDecl* ctor) = 0;
+    virtual void SetDefaultConstructor(std::string className) = 0;
+
     virtual void FoundField(const FieldDecl* field) = 0;
     virtual void FoundMethod(const CXXMethodDecl* method) = 0;
 
@@ -34,12 +37,8 @@ private:
     void OnEnd();
 
 protected:
-    struct TClassCtx {
-        std::string generated_code;
-        bool has_ctor{false};
-    };
 
-    std::unordered_map<std::string, TClassCtx> classes_;
+    std::unordered_map<std::string, std::string> classes_;
     std::vector<std::string> functions_;
     std::ofstream outputFile_;
 };

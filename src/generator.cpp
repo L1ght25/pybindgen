@@ -28,10 +28,7 @@ void IGenerator::OnStart(const std::string& outputPath, const std::string& modul
 
 void IGenerator::OnEnd() {
     for (auto& [_, decl] : classes_) {
-        if (!decl.has_ctor) {
-            decl.generated_code += "\n\t\t.def(py::init<>())";
-        }
-        outputFile_ << decl.generated_code << ";";
+        outputFile_ << decl << ";";
     }
 
     outputFile_ << std::endl;
@@ -54,15 +51,13 @@ public:
 
     void FoundRecord(const CXXRecordDecl* record) override {
         auto recordName = record->getDeclName().getAsString();
-        classes_[recordName].generated_code += std::format(
+        classes_[recordName] += std::format(
             "\n\tpy::class_<{}>(m, \"{}\")", recordName, recordName
         );
     }
 
     void FoundConstructor(const CXXConstructorDecl* ctor) override {
-        auto& classCtx = classes_[ctor->getParent()->getDeclName().getAsString()];
-        classCtx.has_ctor = true;
-        auto& classDecl = classCtx.generated_code;
+        auto& classDecl = classes_[ctor->getParent()->getDeclName().getAsString()];
 
         classDecl += "\n\t\t.def(py::init<";
 
@@ -76,9 +71,13 @@ public:
         classDecl += templateArgs + ">())";
     }
 
+    void SetDefaultConstructor(std::string className) override {
+        classes_[className] += "\n\t\t.def(py::init<>())";
+    }
+
     void FoundField(const FieldDecl* field) override {
         auto recordName = field->getParent()->getDeclName().getAsString();
-        auto& classDecl = classes_[recordName].generated_code;
+        auto& classDecl = classes_[recordName];
 
         classDecl += std::format(
             "\n\t\t.def_readwrite(\"{}\", &{}::{})",
@@ -90,7 +89,7 @@ public:
 
     void FoundMethod(const CXXMethodDecl* method) override {
         auto recordName = method->getParent()->getDeclName().getAsString();
-        auto& classDecl = classes_[recordName].generated_code;
+        auto& classDecl = classes_[recordName];
 
         classDecl += std::format(
             "\n\t\t.def(\"{}\", &{}::{})",

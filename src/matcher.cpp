@@ -13,36 +13,38 @@ void ClassFinder::run(const MatchFinder::MatchResult& result) {
     }
 
     if (HandledMatch<CXXRecordDecl>(result, [&](const CXXRecordDecl* record) {
-            is_public = record->isStruct();
             if (record->hasDefinition()) {
                 generator_->FoundRecord(record);
+
+                //handle all c-tors
+                for (auto* ctor : record->ctors()) {
+                    generator_->FoundConstructor(ctor);
+                }
+                if (record->needsImplicitDefaultConstructor()) {
+                    generator_->SetDefaultConstructor(record->getNameAsString());
+                }
+
+                //handle all methods
+                for (auto* method : record->methods()) {
+                    if (method->getAccess() == clang::AS_public) {
+                        generator_->FoundMethod(method);
+                    }
+                }
+
+                //handle all fields
+                for (auto* field : record->fields()) {
+                    if (field->getAccess() == clang::AS_public) {
+                        generator_->FoundField(field);
+                    }
+                }
             }
         })) {
-        return;
-    } else if (HandledMatch<AccessSpecDecl>(result, [&](const AccessSpecDecl* access) {
-            is_public = access->getAccess() == AccessSpecifier::AS_public;
-        })) {
-        return;
-    } else if (HandledMatch<CXXConstructorDecl>(result, [&](const CXXConstructorDecl* ctor) {
-            generator_->FoundConstructor(ctor);
-        })) {
-        return;
-    } else if (HandledMatch<CXXMethodDecl>(result, [&](const CXXMethodDecl* method) {
-            if (is_public) {
-                generator_->FoundMethod(method);
+    } else {
+        HandledMatch<FunctionDecl>(result, [&](const FunctionDecl* function) {
+            if (!function->isCXXClassMember()) {
+                generator_->FoundFunction(function);
             }
-        })) {
-        return;
-    } else if (HandledMatch<FieldDecl>(result, [&](const FieldDecl* field) {
-            if (is_public) {
-                generator_->FoundField(field);
-            }
-        })) {
-        return;
-    } else if (HandledMatch<FunctionDecl>(result, [&](const FunctionDecl* function) {
-            generator_->FoundFunction(function);
-        })) {
-        return;
+        });
     }
 }
 
