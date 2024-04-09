@@ -1,14 +1,11 @@
 set(LIBNAME main_lib)
 
-set(LLVM_DIR "/opt/homebrew/Cellar/llvm/17.0.6_1/lib/cmake/llvm/")
-set(Clang_DIR "/opt/homebrew/Cellar/llvm/17.0.6_1/lib/cmake/clang/")
 
 set(CMAKE_CXX_STANDARD 20)
 
 # Создание пустого исходного файла, который будет перезаписан после сборки
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/generated.cpp "")
 
-find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
 
 include_directories(${LLVM_INCLUDE_DIRS})
