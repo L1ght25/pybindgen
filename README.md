@@ -26,4 +26,8 @@ make py_<requested library>
 
 * To build your library correctly you need to build in `Release` mode.
 
-* Bindings will be done for all objects that are in `*.h` files of the directories specified in `target_include_directories` in CMake file of your library.
+* Bindings will be done for all objects that are in `*.h` files of the directories specified in `target_include_directories` in CMake file of your library. There won't be bindings for objects in external headers. For example, if you have
+```c++
+#include <iostream>
+```
+Objects from `iostream` won't be binded.
