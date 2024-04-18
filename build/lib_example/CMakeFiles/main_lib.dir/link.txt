@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmain_lib.a CMakeFiles/main_lib.dir/main.cpp.o
+/opt/homebrew/Cellar/llvm/17.0.6_1/bin/llvm-ranlib libmain_lib.a

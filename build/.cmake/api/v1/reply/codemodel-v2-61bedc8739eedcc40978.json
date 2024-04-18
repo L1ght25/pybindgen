@@ -1,0 +1,195 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "extern/pybind11",
+					"jsonFile" : "directory-extern.pybind11-Debug-8dfc4421fd7ebc2c69d2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "extern/pybind11"
+				},
+				{
+					"build" : "src",
+					"jsonFile" : "directory-src-Debug-b6cf2213fc5053b67c22.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						6
+					]
+				},
+				{
+					"build" : "lib_example",
+					"jsonFile" : "directory-lib_example-Debug-dfb9052ff29d99028089.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "lib_example",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "py_build",
+					"jsonFile" : "directory-py_build-Debug-a0cd03a6879b179a8225.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "py_build",
+					"targetIndexes" : 
+					[
+						7
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						2,
+						3,
+						4
+					],
+					"name" : "pybindgen",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "pybind11",
+					"parentIndex" : 0
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "RISCVTargetParserTableGen::@145eef247bfb46b6828c",
+					"jsonFile" : "target-RISCVTargetParserTableGen-Debug-b95e4bfded1f75bc842d.json",
+					"name" : "RISCVTargetParserTableGen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "acc_gen::@145eef247bfb46b6828c",
+					"jsonFile" : "target-acc_gen-Debug-5bafaae3b7a6660f7e4d.json",
+					"name" : "acc_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "clang-tablegen-targets::@145eef247bfb46b6828c",
+					"jsonFile" : "target-clang-tablegen-targets-Debug-28256d243aaf686d48d9.json",
+					"name" : "clang-tablegen-targets",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "intrinsics_gen::@145eef247bfb46b6828c",
+					"jsonFile" : "target-intrinsics_gen-Debug-c7aeb674e9b382deb036.json",
+					"name" : "intrinsics_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "main::@145eef247bfb46b6828c",
+					"jsonFile" : "target-main-Debug-fb3c4ac3ee333fb9a885.json",
+					"name" : "main",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "main_lib::@9d6bfe1725d685077631",
+					"jsonFile" : "target-main_lib-Debug-7e908610cc01def6acc8.json",
+					"name" : "main_lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "omp_gen::@145eef247bfb46b6828c",
+					"jsonFile" : "target-omp_gen-Debug-9873ce9fed18faa37ac3.json",
+					"name" : "omp_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "py_main_lib::@c0c99132d72ba3d3d787",
+					"jsonFile" : "target-py_main_lib-Debug-18b40b89c308e39f16f6.json",
+					"name" : "py_main_lib",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/kvkucher/pybindgen/build",
+		"source" : "/Users/kvkucher/pybindgen"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/Users/kvkucher/pybindgen/build/src",
+  "command": "/opt/homebrew/Cellar/llvm/17.0.6_1/bin/clang++ -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/Users/kvkucher/pybindgen/extern/pybind11/include -I/opt/homebrew/Cellar/llvm/17.0.6_1/include -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/main.dir/generator.cpp.o -c /Users/kvkucher/pybindgen/src/generator.cpp",
+  "file": "/Users/kvkucher/pybindgen/src/generator.cpp",
+  "output": "src/CMakeFiles/main.dir/generator.cpp.o"
+},
+{
+  "directory": "/Users/kvkucher/pybindgen/build/src",
+  "command": "/opt/homebrew/Cellar/llvm/17.0.6_1/bin/clang++ -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/Users/kvkucher/pybindgen/extern/pybind11/include -I/opt/homebrew/Cellar/llvm/17.0.6_1/include -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/main.dir/main.cpp.o -c /Users/kvkucher/pybindgen/src/main.cpp",
+  "file": "/Users/kvkucher/pybindgen/src/main.cpp",
+  "output": "src/CMakeFiles/main.dir/main.cpp.o"
+},
+{
+  "directory": "/Users/kvkucher/pybindgen/build/src",
+  "command": "/opt/homebrew/Cellar/llvm/17.0.6_1/bin/clang++ -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/Users/kvkucher/pybindgen/extern/pybind11/include -I/opt/homebrew/Cellar/llvm/17.0.6_1/include -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/main.dir/matcher.cpp.o -c /Users/kvkucher/pybindgen/src/matcher.cpp",
+  "file": "/Users/kvkucher/pybindgen/src/matcher.cpp",
+  "output": "src/CMakeFiles/main.dir/matcher.cpp.o"
+},
+{
+  "directory": "/Users/kvkucher/pybindgen/build/src",
+  "command": "/opt/homebrew/Cellar/llvm/17.0.6_1/bin/clang++ -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/Users/kvkucher/pybindgen/extern/pybind11/include -I/opt/homebrew/Cellar/llvm/17.0.6_1/include -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/main.dir/util.cpp.o -c /Users/kvkucher/pybindgen/src/util.cpp",
+  "file": "/Users/kvkucher/pybindgen/src/util.cpp",
+  "output": "src/CMakeFiles/main.dir/util.cpp.o"
+},
+{
+  "directory": "/Users/kvkucher/pybindgen/build/lib_example",
+  "command": "/opt/homebrew/Cellar/llvm/17.0.6_1/bin/clang++  -I/Users/kvkucher/pybindgen/extern/pybind11/include -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/main_lib.dir/main.cpp.o -c /Users/kvkucher/pybindgen/lib_example/main.cpp",
+  "file": "/Users/kvkucher/pybindgen/lib_example/main.cpp",
+  "output": "lib_example/CMakeFiles/main_lib.dir/main.cpp.o"
+},
+{
+  "directory": "/Users/kvkucher/pybindgen/build/py_build",
+  "command": "/opt/homebrew/Cellar/llvm/17.0.6_1/bin/clang++ -Dpy_main_lib_EXPORTS -I/Users/kvkucher/pybindgen/lib_example/include -I/Users/kvkucher/pybindgen/lib_example -isystem /Users/kvkucher/pybindgen/extern/pybind11/include -isystem /opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12/include/python3.12 -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -fPIC -fvisibility=hidden -o CMakeFiles/py_main_lib.dir/generated.cpp.o -c /Users/kvkucher/pybindgen/build/py_build/generated.cpp",
+  "file": "/Users/kvkucher/pybindgen/build/py_build/generated.cpp",
+  "output": "py_build/CMakeFiles/py_main_lib.dir/generated.cpp.o"
+}
+]
