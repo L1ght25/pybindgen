@@ -1,8 +1,9 @@
 class A {
-    int first;
-    int second;
+    [[maybe_unused]] int first;
+    [[maybe_unused]] int second;
     public:
-    int third;
+    int third{3};
+    int fourth{22122};
     void pubbar() {
         
     }

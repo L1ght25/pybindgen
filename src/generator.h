@@ -13,7 +13,7 @@ using namespace clang;
 
 class IGenerator {
 public:
-    IGenerator(const std::string& outputPath, const std::string& moduleName, const HeaderManager& headerManager) {}
+    IGenerator(const std::string& /*outputPath*/, const std::string& /*moduleName*/, const HeaderManager& /*headerManager*/) {}
 
     virtual void FoundRecord(const CXXRecordDecl* record) = 0;
     virtual void FoundConstructor(const CXXConstructorDecl* ctor) = 0;

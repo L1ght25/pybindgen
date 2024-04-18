@@ -1,0 +1,7 @@
+RECURSE(
+    contrib/libs/llvm16
+    contrib/libs/clang16
+    contrib/libs/pybind11
+
+    src
+)
