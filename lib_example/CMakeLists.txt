@@ -1,6 +1,6 @@
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(main_lib main.cpp)
+add_library(main_lib main.cpp test.cpp)
 
 target_sources(main_lib PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp

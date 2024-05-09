@@ -32,7 +32,7 @@ void ClassFinder::run(const MatchFinder::MatchResult& result) {
 
                 //handle all methods
                 for (auto* method : record->methods()) {
-                    if (method->getAccess() == clang::AS_public) {
+                    if (method->getAccess() == clang::AS_public && !dynamic_cast<CXXConstructorDecl*>(method)) {
                         generator_->FoundMethod(method);
                     }
                 }

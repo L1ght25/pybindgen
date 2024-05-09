@@ -19,7 +19,9 @@ public:
     {
         outputFile_.open(outputPath, std::ios::out | std::ios::trunc);
 
-        outputFile_ << "#include <pybind11/pybind11.h>\n\n";
+        outputFile_ << "#include <pybind11/pybind11.h>\n";
+        outputFile_ << "#include <pybind11/stl.h>\n\n";
+
         outputFile_ << headerManager.GetIncludes() << "\n\n";
 
         outputFile_ << "namespace py = pybind11;\n\n";
@@ -91,12 +93,12 @@ public:
 
     ~TDefaultGenerator() override {
         for (auto& [_, decl] : classes_) {
-            outputFile_ << decl << ";";
+            outputFile_ << decl << ";\n";
         }
         outputFile_ << std::endl;
 
         for (auto&& decl : functions_) {
-            outputFile_ << std::move(decl) << ";";
+            outputFile_ << std::move(decl) << ";\n";
         }
         outputFile_ << "\n}\n";
 
