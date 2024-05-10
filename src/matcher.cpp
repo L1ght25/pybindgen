@@ -1,6 +1,9 @@
 #include "matcher.h"
 
 #include "clang/AST/NestedNameSpecifier.h"
+#include "clang/AST/Stmt.h"
+#include "clang/ASTMatchers/ASTMatchers.h"
+#include "clang/Basic/AttrKinds.h"
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -13,7 +16,7 @@ ClassFinder::ClassFinder(const std::string& outputPath, const std::string& modul
 
 void ClassFinder::run(const MatchFinder::MatchResult& result) {
     if (const clang::Decl* decl = result.Nodes.getNodeAs<Decl>("id");
-        AlreadyHandled(decl) || IsExternMatch(decl)
+        AlreadyHandled(decl) || IsExternMatch(decl) || NeedsToBeIgnored(decl)
     ) {
         return;
     }
@@ -24,10 +27,14 @@ void ClassFinder::run(const MatchFinder::MatchResult& result) {
 
                 //handle all c-tors
                 for (auto* ctor : record->ctors()) {
+                    if (ctor->isMoveConstructor()) {  // For somewhat, pybind11 doesn't want to work with them
+                        continue;
+                    }
+
                     generator_->FoundConstructor(ctor);
                 }
                 if (record->needsImplicitDefaultConstructor()) {
-                    generator_->SetDefaultConstructor(record->getNameAsString());
+                    generator_->SetDefaultConstructor(record);
                 }
 
                 //handle all methods
@@ -66,6 +73,9 @@ bool ClassFinder::IsExternMatch(const Decl* decl) {
     return !decl->getASTContext().getSourceManager().isWrittenInMainFile(decl->getLocation());
 }
 
+bool ClassFinder::NeedsToBeIgnored(const Decl* decl) {
+    return decl->hasAttr<AnnotateAttr>() && decl->getAttr<AnnotateAttr>()->getAnnotation() == "no_python";
+}
 
 void RunGen(TGenContext ctx) {
     HeaderManager manager(ctx.sourceDirs);

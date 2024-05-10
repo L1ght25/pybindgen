@@ -33,6 +33,7 @@ private:
 
     bool AlreadyHandled(const Decl* decl);
     bool IsExternMatch(const Decl* decl);  // check if match is not in requested headers
+    bool NeedsToBeIgnored(const Decl* decl);  // check for "no_python" attribute
 
 private:
     std::unordered_set<const Decl*> matches_;

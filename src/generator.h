@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <unordered_map>
 
 
 using namespace clang;
@@ -17,7 +18,7 @@ public:
 
     virtual void FoundRecord(const CXXRecordDecl* record) = 0;
     virtual void FoundConstructor(const CXXConstructorDecl* ctor) = 0;
-    virtual void SetDefaultConstructor(std::string className) = 0;
+    virtual void SetDefaultConstructor(const CXXRecordDecl* record) = 0;
     virtual void FoundField(const FieldDecl* field) = 0;
     virtual void FoundMethod(const CXXMethodDecl* method) = 0;
 
@@ -26,7 +27,14 @@ public:
     virtual ~IGenerator() = default;
 
 protected:
-    std::unordered_map<std::string, std::string> classes_;
+    struct TClassCtx {
+        std::string Declaration;
+        std::vector<std::string> Bases;
+        std::unordered_map<std::string, std::vector<const CXXMethodDecl*>> Methods;
+        bool WasHandled{false};
+    };
+
+    std::unordered_map<std::string, TClassCtx> classes_;
     std::vector<std::string> functions_;
     std::ofstream outputFile_;
 };
